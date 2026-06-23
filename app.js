@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/search', (req, res) => {
-    
+    const q = req.query.q;
     const searchResults = recommendations.filter(posts => posts.title.toLowerCase().includes(q.toLowerCase()))
 
     res.render('index.ejs', {
