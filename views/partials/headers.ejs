@@ -1,0 +1,19 @@
+<html>
+    
+<head>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<h1>Movie Night Recommendations</h1>
+<nav class="main-nav">
+    <a href="/" class="nav-btn">Home</a>
+    <a href="/submit" class="nav-btn">Submit</a>
+    <a href="/?sort=votes" class="nav-btn">Trending</a>
+    <a href="/?sort=date" class="nav-btn">New</a>
+</nav>
+
+<form action="/search" method="get">
+    <input type="text" name="q">
+    <button type="submit" class="nav-btn">Search</button>
+</form>

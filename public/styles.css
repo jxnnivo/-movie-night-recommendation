@@ -1,0 +1,101 @@
+* {
+    box-sizing: border-box;
+}
+
+.posts-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 600px) {
+    .posts-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+body {
+    background-color: #F0FFDF;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #333;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    line-height: 1.5;
+}
+
+h1 {
+    font-size: 28px;
+    color: #5c4a4f;
+    margin-bottom: 8px;
+}
+
+.post {
+    background-color: #FFD8DF;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+button:hover,
+.nav-btn:hover {
+    opacity: 0.85;
+}
+
+button {
+    background-color: #FFAAB8;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.nav-btn {
+    background-color: #FFAAB8;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+.main-nav {
+    margin-bottom: 16px;
+}
+
+.action {
+    color: crimson;
+}
+
+.comedy {
+    color: orange;
+}
+
+.drama {
+    color: steelblue;
+}
+
+.horror {
+    color: darkred;
+}
+
+.romance {
+    color: hotpink;
+}
+
+.sci-fi {
+    color: teal;
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.votes {
+    display: inline-block;
+    animation: pop 0.4s ease;
+}

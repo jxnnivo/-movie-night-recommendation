@@ -1,0 +1,22 @@
+<%- include('partials/headers.ejs') %>
+
+<% if (recommendations.length === 0) { %>
+    <p>No recommendations yet — be the first to add one!</p>
+    <a href="/submit">Add a Recommendation</a>
+<% } else { %>
+    <div class="posts-container">
+        <% recommendations.forEach(post => { %>
+            <div class="post">
+                <h3><%= post.title %></h3>
+                <p><%= post.description %></p>
+                <p class="<%= post.genre %>">Genre: <%= post.genre %></p>
+                <p class="votes">Votes: <%= post.votes %></p>
+                <form method="post" action="/vote/<%= post.id %>">
+                    <button type="submit">Upvote</button>
+                </form>
+            </div>
+        <% }) %>
+    </div>
+<% } %>
+
+<%- include('partials/footer.ejs') %>

@@ -1,0 +1,26 @@
+<%- include('partials/headers.ejs') %>
+
+<form method="post" action="/submit">
+    <label for="title">Movie Title:</label>
+    <input type="text" id="title" name="title" required>
+    
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required></textarea>
+
+    <label for="genre">Genre:</label>
+        <select id="genre" name="genre" required>
+            <option value="action">Action</option>
+            <option value="comedy">Comedy</option>
+            <option value="drama">Drama</option>
+            <option value="horror">Horror</option>
+            <option value="romance">Romance</option>
+            <option value="sci-fi">Sci-Fi</option>
+        </select>
+
+    <label for="link">Link</label>
+    <input type="url" name="link" id="link">
+
+    <button type="submit">Submit</button>
+</form>
+
+<%- include('partials/footer.ejs') %>
