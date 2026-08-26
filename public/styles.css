@@ -89,6 +89,42 @@ button {
     color: teal;
 }
 
+.animation {
+    color: mediumorchid;
+}
+
+.adventure {
+    color: darkorange;
+}
+
+.family {
+    color: mediumseagreen;
+}
+
+.fantasy {
+    color: mediumpurple;
+}
+
+.thriller {
+    color: dimgray;
+}
+
+.crime {
+    color: firebrick;
+}
+
+.documentary {
+    color: cadetblue;
+}
+
+.war {
+    color: sienna;
+}
+
+.western {
+    color: saddlebrown;
+}
+
 @keyframes pop {
     0% { transform: scale(1); }
     50% { transform: scale(1.3); }

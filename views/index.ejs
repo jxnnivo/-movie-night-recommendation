@@ -10,7 +10,11 @@
                 <h3><%= post.title %></h3>
                 <img src="<%= post.poster %>" alt="<%= post.title %> poster" class="poster">
                 <p><%= post.description %></p>
-                <p class="<%= post.genre %>">Genre: <%= post.genre %></p>
+                <p>Genre: 
+                    <% post.genre.split(', ').forEach((g, index, arr) => { %>
+                        <span class="<%= g %>"><%= g %></span><% if (index < arr.length - 1) { %>, <% } %>
+                    <% }) %>
+                </p>
                 <p class="votes">Votes: <%= post.votes %></p>
                 <form method="post" action="/vote/<%= post.id %>">
                     <button type="submit">Upvote</button>

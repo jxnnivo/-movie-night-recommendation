@@ -12,13 +12,35 @@ app.use (express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
+const genreMap = {
+    28: 'action',
+    35: 'comedy',
+    18: 'drama',
+    27: 'horror',
+    10749: 'romance',
+    878: 'sci-fi',
+    16: 'animation',
+    12: 'adventure',
+    10751: 'family',
+    14: 'fantasy',
+    53: 'thriller',
+    80: 'crime',
+    99: 'documentary',
+    10752: 'war',
+    37: 'western'
+};
+
 async function fetchMovieDetails(title) {
     const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(title)}&api_key=${process.env.TMDB_API_KEY}`);
     const data = await response.json();
     const movie = data.results[0];
+    if (!movie) {
+    return { overview: '', poster: '', genre: '' };
+        }
     return {
         overview: movie?.overview || '',
-        poster: movie?.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ''
+        poster: movie?.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '',
+        genre: (movie?.genre_ids || []).map(id => genreMap[id]).filter(Boolean).join(', ')
     };
 }
 
@@ -68,8 +90,8 @@ app.post('/submit', async (req, res) => {
             title,
             description: movieDetails.overview,
             poster: movieDetails.poster,
+            genre: movieDetails.genre,
             votes: 0,
-            genre,
             link
         };
         recommendations.push(newRecommendation);
