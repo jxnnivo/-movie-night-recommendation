@@ -8,11 +8,15 @@
         <% recommendations.forEach(post => { %>
             <div class="post">
                 <h3><%= post.title %></h3>
+                <img src="<%= post.poster %>" alt="<%= post.title %> poster" class="poster">
                 <p><%= post.description %></p>
                 <p class="<%= post.genre %>">Genre: <%= post.genre %></p>
                 <p class="votes">Votes: <%= post.votes %></p>
                 <form method="post" action="/vote/<%= post.id %>">
                     <button type="submit">Upvote</button>
+                </form>
+                <form method="post" action="/delete/<%= post.id %>">
+                    <button type="submit">Delete</button>
                 </form>
             </div>
         <% }) %>

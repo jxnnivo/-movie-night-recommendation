@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { readPosts, writePosts } from './data.js';
+import 'dotenv/config';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -10,6 +11,16 @@ let recommendations = readPosts();
 app.use (express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
+
+async function fetchMovieDetails(title) {
+    const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(title)}&api_key=${process.env.TMDB_API_KEY}`);
+    const data = await response.json();
+    const movie = data.results[0];
+    return {
+        overview: movie?.overview || '',
+        poster: movie?.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : ''
+    };
+}
 
 app.get('/', (req, res) => {
     const category = req.query.category;
@@ -46,15 +57,17 @@ app.get('/submit', (req, res) => {
     res.render('submit.ejs');
 });
 
-app.post('/submit', (req, res) => {
+app.post('/submit', async (req, res) => {
     const { title, description, genre, link } = req.body;
     if (title === "") {
         res.redirect('/submit');
     } else {
+        const movieDetails = await fetchMovieDetails(title);
         const newRecommendation = {
             id: Date.now(),
             title,
-            description,
+            description: movieDetails.overview,
+            poster: movieDetails.poster,
             votes: 0,
             genre,
             link
