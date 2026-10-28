@@ -1,12 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { readPosts, writePosts } from './data.js';
+import { readPosts, writePosts, updateVotes, deletePost } from './data.js';
 import 'dotenv/config';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-let recommendations = readPosts();
 
 app.use (express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -44,35 +43,31 @@ async function fetchMovieDetails(title) {
     };
 }
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     const category = req.query.category;
     const sort = req.query.sort;
 
-    let filteredRecommendations;
+    let recommendations = await readPosts();
+
     if (category) {
-        filteredRecommendations = recommendations.filter(post => post.genre === category);
-    } else {
-        filteredRecommendations = recommendations;
+        recommendations = recommendations.filter(post => post.genre === category);
     }
     
     if (sort === "votes") {
-        filteredRecommendations.sort((a, b) => b.votes - a.votes);
+        recommendations.sort((a, b) => b.votes - a.votes);
     } else if (sort === "date") {
-        filteredRecommendations.sort((a, b) => b.id - a.id);
+        recommendations.sort((a, b) => b.id - a.id);
     }
 
-    res.render('index.ejs', {
-        recommendations: filteredRecommendations
-    });
+    res.render('index.ejs', { recommendations });
 });
 
-app.get('/search', (req, res) => {
+app.get('/search', async (req, res) => {
     const q = req.query.q;
-    const searchResults = recommendations.filter(posts => posts.title.toLowerCase().includes(q.toLowerCase()))
+    const allPosts = await readPosts();
+    const recommendations = allPosts.filter(posts => posts.title.toLowerCase().includes(q.toLowerCase()))
 
-    res.render('index.ejs', {
-        recommendations: searchResults
-    });
+    res.render('index.ejs', { recommendations });
 });
 
 app.get('/submit', (req, res) => {
@@ -92,28 +87,20 @@ app.post('/submit', async (req, res) => {
             poster: movieDetails.poster,
             genre: movieDetails.genre,
             votes: 0,
-            link
+            link: link || ''
         };
-        recommendations.push(newRecommendation);
-        writePosts(recommendations);
+        await writePosts(newRecommendation);
         res.redirect('/');
     }
 });
 
-app.post ("/vote/:id", (req, res) => {
-    const post = recommendations.find(post => post.id === Number(req.params.id));
-    if (post) {
-        post.votes += 1;
-        writePosts(recommendations);
-        res.redirect('/');
-    } else {
-        res.status(404).send('Post not found');
-    }
+app.post ("/vote/:id", async (req, res) => {
+    await updateVotes(Number(req.params.id));
+    res.redirect('/');
 });
 
-app.post ("/delete/:id", (req, res) => {
-    recommendations = recommendations.filter(post => post.id !== Number(req.params.id));
-    writePosts(recommendations);
+app.post ("/delete/:id", async(req, res) => {
+    await deletePost(Number(req.params.id));
     res.redirect('/');
 });
 
